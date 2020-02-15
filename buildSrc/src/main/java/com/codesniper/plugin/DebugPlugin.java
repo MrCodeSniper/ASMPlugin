@@ -2,6 +2,7 @@ package com.codesniper.plugin;
 
 
 import com.android.build.gradle.AppExtension;
+import com.codesniper.plugin.transform.PluginTransform;
 
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
@@ -20,5 +21,6 @@ public class DebugPlugin implements Plugin<Project> {
             }
         });
         AppExtension appExtension= (AppExtension) project.getExtensions().getByName("android");
+        appExtension.registerTransform(new PluginTransform());
     }
 }
