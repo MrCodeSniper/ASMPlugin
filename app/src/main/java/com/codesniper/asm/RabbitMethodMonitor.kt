@@ -2,17 +2,18 @@ package com.codesniper.asm
 
 import android.content.Context
 import android.os.Looper
-import com.codesniper.plugin.RabbitTracerEventNotifier
+import com.codesniper.gradle_interface.RabbitTracerEventNotifier
 
 
 internal class RabbitMethodMonitor(override var isOpen: Boolean = false) : RabbitMonitorProtocol {
 
     private val T = javaClass.simpleName
-    private val slowMethodThreshold = 50L
+    private val slowMethodThreshold = RabbitMonitor.mConfig.slowMethodPeriodMs
+
 
     private val methodCostListener = object : RabbitTracerEventNotifier.MethodCostEvent {
         override fun methodCost(methodStr: String, time: Long) {
-            val monitorCurrentThread = if (true) {
+            val monitorCurrentThread = if (RabbitMonitor.mConfig.onlyCheckMainThreadSlowMethod) {
                 Thread.currentThread().name == Looper.getMainLooper().thread.name
             } else {
                 true
@@ -40,13 +41,10 @@ internal class RabbitMethodMonitor(override var isOpen: Boolean = false) : Rabbi
 
         if (classNameStartIndex > 0) {
 
-            val className =
-                fullClassName.subSequence(classNameStartIndex + 1, fullClassName.length).toString()
+            val className = fullClassName.subSequence(classNameStartIndex + 1, fullClassName.length).toString()
             val pkgName = fullClassName.subSequence(0, classNameStartIndex).toString()
-            RabbitLog.d(
-                TAG_MONITOR,
-                "slow method --> $pkgName -> $className -> $methodName -> $time ms"
-            )
+            RabbitLog.d(TAG_MONITOR, "slow method --> $pkgName -> $className -> $methodName -> $time ms")
+//
 //
 //            val slowMethod = RabbitSlowMethodInfo().apply {
 //                this.pkgName = pkgName
@@ -56,7 +54,7 @@ internal class RabbitMethodMonitor(override var isOpen: Boolean = false) : Rabbi
 //                this.time = System.currentTimeMillis()
 //                callStack = RabbitMonitorUtils.traceToString(5, Thread.currentThread().stackTrace, 15)
 //            }
-//
+
 //            RabbitDbStorageManager.save(slowMethod)
         }
     }

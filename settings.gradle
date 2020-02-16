@@ -1,2 +1,2 @@
-include ':app',':buildSrc', ':gradle-interface'
+include ':app', ':gradle-transform', ':gradle-interface'
 rootProject.name='ASM'

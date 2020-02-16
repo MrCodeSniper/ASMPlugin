@@ -6,7 +6,7 @@ package com.codesniper.gradle_interface;
 public class MethodTracer {
 
     private static long methodStartTime = 0;
-    public static final String CLASS_PATH = "com/susion/rabbit/tracer/MethodTracer";
+    public static final String CLASS_PATH = "com/codesniper/gradle_interface/MethodTracer";
     public static final String METHOD_RECORD_METHOD_START = "recordMethodStart";
     public static final String METHOD_RECORD_METHOD_END = "recordMethodEnd";
     public static final String METHOD_RECORD_METHOD_END_PARAMS = "(Ljava/lang/String;)V";
